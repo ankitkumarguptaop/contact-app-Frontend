@@ -1,0 +1,70 @@
+.body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90vh;
+}
+.filters{
+    margin-top: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    height: 60px;
+    width: 90vw;
+    justify-content: space-around;
+}
+.single-contact-box{
+    height: 40px;
+    display: flex;
+    border: 1px solid black;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.contact-list{
+    border-radius: 5px;
+    height: 70vh;
+    width :90vw;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+
+.css-4nmryk-MuiBackdrop-root-MuiModal-backdrop{
+  background-color: rgb(255, 255, 255) !important;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+
+.input{
+   margin: 6px 10px 10px 0px !important;
+  input{
+      width: 350px;
+  }
+
+}
+
+.add-text{
+    margin: 10px;
+}
+
+.radio-button{
+ display: flex;
+    width: 10px;
+}
+
+
+.select-favourite{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    
+ 
+}
+
+.radio-button{
+    width: 100%;
+    display: flex;
+
+}

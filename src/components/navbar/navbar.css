@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 45px;
+  background-color: rgb(46, 46, 142);
+  min-width: 100vw;
+  justify-content: space-between;
+}
+
+.left-items {
+  margin-left: 15px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  div {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.right-items {
+  margin-right: 15px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  div {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
