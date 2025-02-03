@@ -257,6 +257,7 @@ const Body = () => {
   }
   return (
     <Box className="body">
+    
       <Box className="filters">
         <TextField
           label="search"
@@ -386,7 +387,7 @@ const Body = () => {
                 <FormControl
                   sx={{ marginTop: "5px", minWidth: 120 }}
                   size="small"
-                  error={input.relation}
+                  error={error.relation}
                 >
                   <InputLabel id="demo-simple-select-label">
                     Relations
@@ -458,6 +459,7 @@ const Body = () => {
           </Box>
         </Modal>
       </FormControl>
+      {isLoading ?  <Box className="loader"></Box> : 
       <Paper sx={{ width: "90%", overflow: "hidden" }}>
         <TableContainer sx={{ maxHeight: 450 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -475,7 +477,7 @@ const Body = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {contacts.map((contact) => {
+              {   contacts && contacts.map((contact) => {
                 return (
                   <TableRow
                     hover
@@ -545,6 +547,7 @@ const Body = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+}
     </Box>
   );
 };
