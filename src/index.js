@@ -7,6 +7,8 @@ import { persistor } from "./store/store";
 import { PersistGate } from 'redux-persist/integration/react';
 // import dotenv from 'dotenv';
 // dotenv.config();
+// require('dotenv').config()
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

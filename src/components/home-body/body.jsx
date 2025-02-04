@@ -4,13 +4,10 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  FormLabel,
   InputLabel,
   MenuItem,
   Modal,
   Paper,
-  Radio,
-  RadioGroup,
   Select,
   Table,
   TableBody,
@@ -20,12 +17,12 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import React, { useEffect, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   listContact,
@@ -34,38 +31,33 @@ import {
   updateContact,
 } from "../../features/contact/contact.action";
 import { listRelation } from "../../features/relation/relation.action";
-
 import "./body.css";
 import CustomInput from "../input/input";
+import debounce from "lodash.debounce";
 const Body = () => {
-  // const error = useSelector((state) => state.contact.error);
   const dispatch = useDispatch();
-
   const contacts = useSelector((state) => state.contact.contacts);
   const totalContacts = useSelector((state) => state.contact.totalContacts);
-
   const relations = useSelector((state) => state.relation.relations);
   const [relation, setRelation] = useState();
   const isLoading = useSelector((state) => state.contact.isLoading);
   const currentUser = useSelector((state) => state.auth.currentUser);
   const user_id = currentUser.data.user._id;
-
   const [page, setPage] = useState(0);
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [limit, setLimit] = useState(5);
   const [contactId, setContactId] = useState(5);
-
   const [openModal, setOpenModal] = useState(false);
+  const [openChildAddModal, setOpenChildAddModal] = useState(false);
   const [favourite, setfavourite] = useState(false);
   const [input, setInput] = useState({
     first_name: "",
     last_name: "",
     phone_no: "",
-    relation: null,
+    relation: "",
     favourite: false,
   });
   const [editState, setEditState] = useState(false);
-
   const [error, setError] = useState({
     first_name: false,
     last_name: false,
@@ -73,27 +65,54 @@ const Body = () => {
     relation: false,
   });
 
-  console.log(user_id, page);
+  function handleChangeRelation(e) {
+    if (e.target.value) {
+      setRelation(e.target.value);
+    } else {
+      setRelation();
+    }
+  }
 
-  useEffect(() => {
-    dispatch(
-      listContact({
-        user_id,
-        search,
-        page,
-        limit,
-        relation,
-        favourite,
-      })
-    );
-    console.log("rerender useeffect");
-  }, [search, limit, page, user_id, relation, favourite]);
+  // const handleInputChange = (event) => {
+  //   setSearch(event.target.value);
+  //   debouncedResults(event.target.value);
+  // };
+  // const debouncedResults = useMemo(() => {
+  //   return debounce(handleInputChange, 300);
+  // }, []);
+
+  // useEffect(() => {
+  //   return () => {
+  //     debouncedResults.cancel();
+  //   };
+  // });
+
+
+  const useDebouncedValue = (inputValue, delay) => {
+    const [debouncedValue, setDebouncedValue] = useState(inputValue);
+  
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(inputValue);
+      }, delay);
+  
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [inputValue, delay]);
+  
+    return debouncedValue;
+  };
+  
+  const debouncedSearchTerm = useDebouncedValue(search, 500);
+
+
 
   useEffect(() => {
     dispatch(listRelation());
   }, []);
 
-  const style = {
+  const parentStyle = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
@@ -102,21 +121,20 @@ const Body = () => {
     bgcolor: "rgb(255, 255, 255)",
     color: "black",
     p: 6,
+    zIndex: 2,
   };
 
-  function handleChangeRelation(e) {
-    if (e.target.value !== "None") {
-      setRelation(e.target.value);
-    } else {
-      setRelation();
-    }
-  }
-
-  function handleSearch(e) {
-    console.log(e.target.value);
-    setSearch(e.target.value);
-    setPage(0);
-  }
+  const childModalstyle = {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 300,
+    height: 100,
+    bgcolor: "rgb(255, 255, 255)",
+    color: "black",
+    p: 6,
+    zIndex: 3,
+  };
 
   const columns = [
     { id: "first_name", last_name: "last_name", label: "Name", minWidth: 170 },
@@ -148,6 +166,100 @@ const Body = () => {
   };
 
   function addOrEditContacts() {
+    if (!editState) {
+      dispatch(
+        createContact({
+          relation_id: input.relation,
+          first_name: input.first_name,
+          last_name: input.last_name,
+          phone_no: input.phone_no,
+          user_id: user_id,
+          favourite: input.favourite,
+        })
+      );
+    
+
+     
+    } else {
+      dispatch(
+        updateContact({
+          updatedData: {
+            relation_id: input.relation,
+            first_name: input.first_name,
+            last_name: input.last_name,
+            phone_no: input.phone_no,
+            user_id: user_id,
+            favourite: input.favourite,
+          },
+          contact_id: contactId,
+        })
+      );
+    }
+    setInput({
+      first_name: "",
+      last_name: "",
+      phone_no: "",
+      relation: "",
+      favourite: false,
+    });
+    setOpenModal(false);
+    setEditState(false);
+    setOpenChildAddModal(false);
+  }
+
+  function handleCloseModal() {
+    setInput({
+      first_name: "",
+      last_name: "",
+      phone_no: "",
+      relation: "",
+      favourite: "",
+    });
+    setError({
+      first_name: false,
+      last_name: false,
+      phone_no: false,
+      relation: false,
+    });
+    setOpenModal(false);
+    setEditState(false);
+    setOpenChildAddModal(false);
+  }
+
+  function handleSelectFavourite(e) {
+    setInput({ ...input, favourite: !input.favourite });
+  }
+  function handleEditState(contact) {
+    setEditState(true);
+    setOpenModal(true);
+    setContactId(contact._id);
+    setInput({
+      first_name: contact.first_name,
+      last_name: contact.last_name,
+      phone_no: contact.phone_no,
+      relation: contact.relation_id._id,
+      favourite: contact.favourite,
+    });
+  }
+
+  function handleDelete(id) {
+    console.log("delete", id);
+    dispatch(deleteContact(id));
+  
+  }
+
+  function clearFilters() {
+    setPage(0);
+    setRelation("");
+    setSearch("");
+    setfavourite(false);
+  }
+
+  function filterFavourite() {
+    setfavourite(!favourite);
+  }
+
+  function handleErrorHandling() {
     let firstNameError = false;
     let lastNameError = false;
     let phone_noError = false;
@@ -183,108 +295,44 @@ const Body = () => {
     });
 
     if (!firstNameError && !lastNameError && !relationError && !phone_noError) {
-      if (!editState) {
-        dispatch(
-          createContact({
-            relation_id: input.relation,
-            first_name: input.first_name,
-            last_name: input.last_name,
-            phone_no: input.phone_no,
-            user_id: user_id,
-            favourite: input.favourite,
-          })
-        );
-      } else {
-        dispatch(
-          updateContact({
-            updatedData: {
-              relation_id: input.relation,
-              first_name: input.first_name,
-              last_name: input.last_name,
-              phone_no: input.phone_no,
-              user_id: user_id,
-              favourite: input.favourite,
-            },
-            contact_id: contactId,
-          })
-        );
-      }
-      setInput({
-        first_name: "",
-        last_name: "",
-        phone_no: "",
-        relation: null,
-        favourite: null,
-      });
-      setOpenModal(false);
-      setEditState(false);
+      setOpenChildAddModal(true);
     }
   }
+  
+  useEffect(() => {
+    dispatch(
+      listContact({
+        user_id,
+        search,
+        page,
+        limit,
+        relation,
+        favourite,
+      })
+    );
+  }, [ limit, page, user_id, relation, favourite ,debouncedSearchTerm ,totalContacts ]);
 
-  function handleCloseModal() {
-    setInput({
-      first_name: "",
-      last_name: "",
-      phone_no: "",
-      relation: null,
-      favourite: null,
-    });
-    setOpenModal(false);
-    setEditState(false)
-  }
-
-  function handleSelectFavourite(e) {
-    setInput({ ...input, favourite: e.target.value });
-  }
-  function handleEditState(contact) {
-    setEditState(true);
-    setOpenModal(true);
-    setContactId(contact._id);
-    console.log(contact._id);
-    setInput({
-      first_name: contact.first_name,
-      last_name: contact.last_name,
-      phone_no: contact.phone_no,
-      relation: contact.relation_id,
-      favourite: contact.favourite,
-    });
-  }
-
-  function handleDelete(id) {
-    console.log("delete", id);
-    dispatch(deleteContact(id));
-  }
-
-  function clearFilters() {
-    setPage(0);
-    setRelation(undefined);
-    setSearch("");
-    setfavourite(false);
-  }
-  function filterFavourite() {
-    setfavourite(!favourite);
-  }
   return (
     <Box className="body">
       <Box className="filters">
         <TextField
+        sx={{margin:"8px" ,minWidth: 150 ,width:"300px"}}
           label="search"
-          onChange={(e) => handleSearch(e)}
+          onChange={(e) => setSearch(e.target.value)}
           value={search}
           size="small"
-          floatingLabelStyle={{ color: "black" }}
         />
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 150 ,width:"300px"}} size="small">
           <InputLabel id="demo-select-small-label">Relations</InputLabel>
           <Select
             labelId="demo-select-small-label"
             id="demo-select-small"
-            value={relation ? relation : "None"}
+            value={relation ? relation : ""}
             label="Relations"
             onChange={handleChangeRelation}
-            sx={{ width: "240px", height: "40px" }}
+            sx={{ height: "40px"  }}
           >
-            <MenuItem value="None">
+            <MenuItem value={null}>
               <em>None</em>
             </MenuItem>
 
@@ -301,14 +349,14 @@ const Body = () => {
           label="Favourite"
         />
         <Button
-          sx={{ height: "40px" }}
+          sx={{ height: "40px" ,marginRight:"5px" }}
           variant="contained"
           onClick={() => clearFilters()}
         >
           Clear
         </Button>
         <Button
-          sx={{ height: "40px" }}
+          sx={{ height: "40px"  ,marginLeft : "5px"}}
           variant="contained"
           onClick={() => setOpenModal(true)}
         >
@@ -317,7 +365,7 @@ const Body = () => {
       </Box>
 
       <FormControl className="form">
-        <Modal sx={style} open={openModal} onClose={handleCloseModal}>
+        <Modal sx={parentStyle} open={openModal} onClose={handleCloseModal}>
           <Box className="modal-background">
             <Box className="add-functionality">
               <Box className="add-text">Add Contact</Box>
@@ -399,7 +447,7 @@ const Body = () => {
                       setInput({ ...input, relation: e.target.value })
                     }
                     sx={{ width: "380px", height: "40px" }}
-                    label="Relations"
+                    label={"Relation"}
                   >
                     {relations &&
                       relations.map((relation) => (
@@ -413,7 +461,6 @@ const Body = () => {
                   <Box
                     style={{
                       color: "red",
-                      // marginTop: "-14px",
                       marginBottom: "10px",
                     }}
                   >
@@ -421,47 +468,69 @@ const Body = () => {
                   </Box>
                 )}
                 <Box className="select-favourite">
-                  <FormLabel id="demo-controlled-radio-buttons-group">
-                    Favourite
-                  </FormLabel>
-                  <RadioGroup
-                    className="radio-button"
-                    aria-labelledby="demo-controlled-radio-buttons-group"
-                    name="controlled-radio-buttons-group"
-                    value={input.favourite}
-                    onChange={handleSelectFavourite}
-                  >
-                    <FormControlLabel
-                      value={true}
-                      control={<Radio />}
-                      label="Yes"
-                    />
-                    <FormControlLabel
-                      value={false}
-                      control={<Radio />}
-                      label="No"
-                    />
-                  </RadioGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={input.favourite}
+                        onChange={handleSelectFavourite}
+                      />
+                    }
+                    label="Favourite"
+                  />
                 </Box>
-                <Button
-                  disableRipple
-                  disableElevation
-                  className="add-contacts"
-                  onClick={() => addOrEditContacts()}
-                  variant="contained"
-                >
-                  {editState ? "Edit" : "Add"}
-                </Button>
-                <Button
-                  disableRipple
-                  disableElevation
-                  className="close-modal"
-                  onClick={handleCloseModal}
-                  variant="contained"
-                >
-                  {"Close"}
-                </Button>
+                <Box className="Add-edit-close-button">
+                  <Button
+                    disableRipple
+                    disableElevation
+                    className="add-contacts"
+                    onClick={handleErrorHandling}
+                    variant="contained"
+                  >
+                    {editState ? "Edit" : "Add"}
+                  </Button>
+                  <Button
+                    disableRipple
+                    disableElevation
+                    className="close-modal"
+                    onClick={handleCloseModal}
+                    variant="contained"
+                  >
+                    {"Close"}
+                  </Button>
+                </Box>
               </Box>
+            </Box>
+          </Box>
+        </Modal>
+        <Modal
+          sx={childModalstyle}
+          keepMounted
+          open={openChildAddModal}
+          onClose={handleCloseModal}
+          aria-labelledby="keep-mounted-modal-title"
+          aria-describedby="keep-mounted-modal-description"
+        >
+          <Box>
+            <Typography
+              id="keep-mounted-modal-title"
+              variant="body2"
+              component="h4"
+            >
+              {editState
+                ? "Do you want to Edit Contact? "
+                : "Do you want to Add Contact ?"}
+            </Typography>
+            <Box className="child-modal-buttons">
+              <Button onClick={() => addOrEditContacts()} variant="contained">
+                {" "}
+                Yes
+              </Button>
+              <Button
+                onClick={() => setOpenChildAddModal(false)}
+                variant="contained"
+              >
+                No
+              </Button>
             </Box>
           </Box>
         </Modal>

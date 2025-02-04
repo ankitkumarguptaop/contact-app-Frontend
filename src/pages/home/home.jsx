@@ -3,10 +3,6 @@ import Navbar from "../../components/navbar/navbar";
 import Body from "../../components/home-body/body";
 
 const Home = () => {
- 
-
-      
-  
 
   return (
     <>

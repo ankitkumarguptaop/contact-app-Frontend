@@ -1,14 +1,12 @@
-import React from "react";
-import "./signup.css";
 import { Alert, Box, Button, Checkbox, Snackbar } from "@mui/material";
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import CustomInput from "../../components/input/input";
-
 import "./signup.css";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpUser } from "../../features/auth-user/auth.action";
 import { removeError } from "../../features/auth-user/auth.slice";
+import "./signup.css";
 
 const Signup = () => {
   const navigate = useNavigate();

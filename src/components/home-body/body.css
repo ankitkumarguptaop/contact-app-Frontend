@@ -1,100 +1,124 @@
-.body{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 90vh;
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
 }
-.filters{
-    margin-top: 20px;
-    margin-bottom: 15px;
-    display: flex;
-    height: 60px;
-    width: 90vw;
-    justify-content: space-around;
+.filters {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  height: 60px;
+  width: 90vw;
+  justify-content: space-around;
 }
-.single-contact-box{
-    height: 40px;
-    display: flex;
-    border: 1px solid black;
-    align-items: center;
-    justify-content: space-around;
-}
-
-
-.contact-list{
-    border-radius: 5px;
-    height: 70vh;
-    width :90vw;
-    background-color: rgb(255, 255, 255);
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+.single-contact-box {
+  height: 40px;
+  display: flex;
+  border: 1px solid black;
+  align-items: center;
+  justify-content: space-around;
 }
 
+.contact-list {
+  border-radius: 5px;
+  height: 70vh;
+  width: 90vw;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
 
-.css-4nmryk-MuiBackdrop-root-MuiModal-backdrop{
+.css-4nmryk-MuiBackdrop-root-MuiModal-backdrop {
   background-color: rgb(255, 255, 255) !important;
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-
-.input{
-   margin: 6px 10px 10px 0px !important;
-  input{
-      width: 350px;
+.input {
+  margin: 6px 10px 10px 0px !important;
+  input {
+    width: 350px;
   }
-
 }
 
-.add-text{
-    margin: 10px;
+.add-text {
+  margin: 10px;
 }
 
-.radio-button{
- display: flex;
-    width: 10px;
+.radio-button {
+  display: flex;
+  width: 10px;
 }
 
-
-.select-favourite{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    
- 
+.select-favourite {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
-.radio-button{
-    width: 100%;
-    display: flex;
-
+.radio-button {
+  width: 100%;
+  display: flex;
 }
-
 
 .loader {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    position: relative;
-    animation: rotate 1s linear infinite
-  }
-  .loader::before {
-    content: "";
-    box-sizing: border-box;
-    position: absolute;
-    inset: 0px;
-    border-radius: 50%;
-    border: 5px solid #000000;
-    animation: prixClipFix 2s linear infinite ;
-  }
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite;
+}
+.loader::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 5px solid #000000;
+  animation: prixClipFix 2s linear infinite;
+}
 
-  @keyframes rotate {
-    100%   {transform: rotate(360deg)}
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
   }
+}
 
-  @keyframes prixClipFix {
-      0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
-      25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
-      50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
-      75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
-      100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+@keyframes prixClipFix {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
   }
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+  }
+}
+
+.Add-edit-close-button {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 5px;
+  Button {
+    margin: 10px;
+  }
+}
+
+
+.child-modal-buttons{
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

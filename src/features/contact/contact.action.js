@@ -5,6 +5,7 @@ import {
   deleteContactType,
   updateContactType,
   createContactType,
+  recoverContactType
 } from "./contact.type";
 
 import {
@@ -12,6 +13,7 @@ import {
   updateContactService,
   deleteContactService,
   createContactService,
+  recoverContactService,
 } from "../../services/contact.service";
 
 // this is action / action creator
@@ -58,6 +60,19 @@ export const updateContact = createAsyncThunk(
     return data;
   }
 );
+
+export const recoverContacts = createAsyncThunk(
+  recoverContactType,
+  async () => {
+    const res = await axios.put(
+      recoverContactService()
+    );
+    const data = res.data;
+    console.log("res data", data);
+    return data;
+  }
+);
+
 
 export const createContact = createAsyncThunk(
   createContactType,

@@ -1,2 +1,2 @@
-export const  signup ="CREATE/USERS";
+export const  signup ="SIGNUP/USERS";
 export const  signin ="SIGNIN/USERS";
