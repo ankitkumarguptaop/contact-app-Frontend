@@ -217,11 +217,20 @@ const Body = () => {
         favourite: null,
       });
       setOpenModal(false);
+      setEditState(false);
     }
   }
 
   function handleCloseModal() {
+    setInput({
+      first_name: "",
+      last_name: "",
+      phone_no: "",
+      relation: null,
+      favourite: null,
+    });
     setOpenModal(false);
+    setEditState(false)
   }
 
   function handleSelectFavourite(e) {
@@ -257,7 +266,6 @@ const Body = () => {
   }
   return (
     <Box className="body">
-    
       <Box className="filters">
         <TextField
           label="search"
@@ -311,16 +319,6 @@ const Body = () => {
       <FormControl className="form">
         <Modal sx={style} open={openModal} onClose={handleCloseModal}>
           <Box className="modal-background">
-            <CloseIcon
-              onClick={handleCloseModal}
-              sx={{
-                cursor: "pointer",
-                backgroundColor: "#1976d2",
-                height: "30px",
-                width: "30px",
-              }}
-            ></CloseIcon>
-
             <Box className="add-functionality">
               <Box className="add-text">Add Contact</Box>
               <Box className="form">
@@ -329,7 +327,7 @@ const Body = () => {
                   errorState={error.first_name}
                   value={input.first_name}
                   handlerState={(e) =>
-                    setInput({ ...input, first_name: e.target.value  })
+                    setInput({ ...input, first_name: e.target.value })
                   }
                   label="First Name"
                 />
@@ -454,100 +452,112 @@ const Body = () => {
                 >
                   {editState ? "Edit" : "Add"}
                 </Button>
+                <Button
+                  disableRipple
+                  disableElevation
+                  className="close-modal"
+                  onClick={handleCloseModal}
+                  variant="contained"
+                >
+                  {"Close"}
+                </Button>
               </Box>
             </Box>
           </Box>
         </Modal>
       </FormControl>
-      {isLoading ?  <Box className="loader"></Box> : 
-      <Paper sx={{ width: "90%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 450 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {   contacts && contacts.map((contact) => {
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={contact._id}
-                  >
-                    {columns.map((column) => {
-                      let value = null;
-                      if (column.last_name) {
-                        value = `${contact[column.id]} ${
-                          contact[column.last_name]
-                        }`;
-                      } else if (column.id === "relation_id") {
-                        value = contact[column.id].relation_type;
-                      } else if (column.id === "favourite") {
-                        if (contact[column.id]) {
-                          value = (
-                            <StarBorderIcon
-                              sx={{ color: "yellow" }}
-                            ></StarBorderIcon>
+      {isLoading ? (
+        <Box className="loader"></Box>
+      ) : (
+        <Paper sx={{ width: "90%", overflow: "hidden" }}>
+          <TableContainer sx={{ maxHeight: 450 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {contacts &&
+                  contacts.map((contact) => {
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={contact._id}
+                      >
+                        {columns.map((column) => {
+                          let value = null;
+                          if (column.last_name) {
+                            value = `${contact[column.id]} ${
+                              contact[column.last_name]
+                            }`;
+                          } else if (column.id === "relation_id") {
+                            value = contact[column.id].relation_type;
+                          } else if (column.id === "favourite") {
+                            if (contact[column.id]) {
+                              value = (
+                                <StarBorderIcon
+                                  sx={{ color: "yellow" }}
+                                ></StarBorderIcon>
+                              );
+                            } else {
+                              value = (
+                                <StarBorderIcon color="primary"></StarBorderIcon>
+                              );
+                            }
+                          } else if (column.id === "Actions") {
+                            value = (
+                              <>
+                                <ModeEditOutlineIcon
+                                  sx={{ padding: "5px", cursor: "pointer" }}
+                                  onClick={() => handleEditState(contact)}
+                                >
+                                  {" "}
+                                </ModeEditOutlineIcon>{" "}
+                                <DeleteForeverIcon
+                                  sx={{ padding: "5px", cursor: "pointer" }}
+                                  onClick={() => handleDelete(contact._id)}
+                                ></DeleteForeverIcon>
+                              </>
+                            );
+                          } else {
+                            value = contact[column.id];
+                          }
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === "number"
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
                           );
-                        } else {
-                          value = (
-                            <StarBorderIcon color="primary"></StarBorderIcon>
-                          );
-                        }
-                      } else if (column.id === "Actions") {
-                        value = (
-                          <>
-                            <ModeEditOutlineIcon
-                              sx={{ padding: "5px", cursor: "pointer" }}
-                              onClick={() => handleEditState(contact)}
-                            >
-                              {" "}
-                            </ModeEditOutlineIcon>{" "}
-                            <DeleteForeverIcon
-                              sx={{ padding: "5px", cursor: "pointer" }}
-                              onClick={() => handleDelete(contact._id)}
-                            ></DeleteForeverIcon>
-                          </>
-                        );
-                      } else {
-                        value = contact[column.id];
-                      }
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 30]}
-          component="div"
-          count={totalContacts}
-          rowsPerPage={limit}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-}
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 30]}
+            component="div"
+            count={totalContacts}
+            rowsPerPage={limit}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      )}
     </Box>
   );
 };
