@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signUpUser } from "../../features/auth-user/auth.action";
 import { removeError } from "../../features/auth-user/auth.slice";
 import "./signup.css";
+import Auth from "../../components/google-auth/auth";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -274,7 +275,7 @@ const Signup = () => {
                   <Box
                     style={{
                       color: "red",
-                      marginTop: "-14px",
+                      marginTop: "-4px",
                       marginBottom: "10px",
                     }}
                   >
@@ -294,7 +295,6 @@ const Signup = () => {
                   <Box
                     style={{
                       color: "red",
-                      marginTop: "-14px",
                       marginBottom: "10px",
                     }}
                   >
@@ -306,7 +306,7 @@ const Signup = () => {
                 <CustomInput
                   value={input.email}
                   errorState={error.emailError}
-                  className="input-email"
+                  className="input-password"
                   handlerState={handleEmail}
                   label="Email "
                 ></CustomInput>
@@ -342,6 +342,9 @@ const Signup = () => {
                   Enter correct password
                 </Box>
               )}
+                <Box className="upload-picture">
+                 <input type="file" name="picture"/>
+                </Box>
               <Box className="feature-container">
                 <Box className="check-box">
                   <Checkbox
@@ -369,11 +372,12 @@ const Signup = () => {
                     </Box>
                   )}
                 </Box>
+              
               </Box>
               <Button
                 onClick={handleSignUp}
-                // diableripple
                 disableElevation
+                type="submit"
                 sx={{
                   bgcolor: "#7754f6",
                   color: "#FFFFFF",
@@ -396,6 +400,7 @@ const Signup = () => {
               </Box>
             </Box>
           </Box>
+          <Auth></Auth>
         </Box>
       </Box>
     </Box>

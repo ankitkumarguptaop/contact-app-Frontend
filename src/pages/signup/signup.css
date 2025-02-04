@@ -20,8 +20,9 @@
   display: flex;
   /* align-items: center; */
   justify-content: center;
-  height: 600px;
-  width: 500px;
+  /* height: 650px; */
+  height:auto;
+  width: 34vw;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
@@ -51,10 +52,10 @@
 }
 
 .login-text {
-  margin-top: 50px;
+  margin-top: 10px;
   font-family: "Inter", serif;
   font-optical-sizing: auto;
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -78,7 +79,7 @@
 }
 
 .input-password {
-  height: 60px;
+  height: 40px;
   width: 25vw;
 }
 .input-email {

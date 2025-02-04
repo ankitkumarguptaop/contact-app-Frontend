@@ -8,6 +8,7 @@ import "./signin.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeError } from "../../features/auth-user/auth.slice";
 import { signInUser } from "../../features/auth-user/auth.action";
+import Auth from "../../components/google-auth/auth";
 const Signin = () => {
   const navigate = useNavigate();
 
@@ -17,7 +18,7 @@ const Signin = () => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [checked, setChecked] = useState(false);
   const [checkboxError, setCheckboxError] = useState(false);
-
+  console.log("currentUser", currentUser);
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -115,18 +116,16 @@ const Signin = () => {
 
         dispatch(signInUser(data));
 
-        if (currentUser.data.user.email === input.email) {
-          const token = currentUser.data.token;
-          console.log("token", token);
-          Cookies.set("jwt", token, { expires: 7, secure: true });
-          setInput({
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-          });
-          navigate("/home");
-        }
+         const token = currentUser.token;
+        // console.log("token", token);
+        Cookies.set("jwt", token , { expires: 7, secure: true });
+        setInput({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+        });
+        navigate("/home");
       } catch (error) {
         console.log(error);
       }
@@ -263,6 +262,7 @@ const Signin = () => {
                 </Box>
               </Box>
             </Box>
+       <Auth></Auth>
           </Box>
         </Box>
       </Box>

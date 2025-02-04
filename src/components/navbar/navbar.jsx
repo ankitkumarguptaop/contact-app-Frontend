@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import "./navbar.css";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector ,useDispatch } from "react-redux";
@@ -11,8 +11,8 @@ const Navbar = () => {
   const navigate =useNavigate()
   const dispatch =useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
-  console.log(currentUser.data.user.first_name);
-  console.log(currentUser.data.user.last_name);
+  // console.log(currentUser.data.user.first_name);
+  // console.log(currentUser.data.user.last_name);
   console.log( " user" ,currentUser);
 
 
@@ -23,9 +23,10 @@ const Navbar = () => {
 
   function handleRecoverContact(){
     dispatch(recoverContacts())
-    dispatch(listContact({user_id:currentUser.data.user._id}))
+    dispatch(listContact({user_id:currentUser.user._id}))
   }
 
+  console.log("picture",currentUser.user.picture)
   return (
     <Box className="navbar">
       <Box className="left-items">
@@ -39,8 +40,9 @@ const Navbar = () => {
         </Typography>
       </Box>
       <Box className="right-items">
+      <Avatar alt="Remy Sharp" src={currentUser.user.picture} />
         <Typography variant="subtitle1" component="h2" sx={{ color: "white" }}>
-          {currentUser.data.user.first_name} {currentUser.data.user.last_name}
+          {currentUser.user.first_name} {currentUser.user.last_name}
         </Typography>
         <Button sx={{color:"black" ,backgroundColor:"green", margin:"10px"}} onClick={handleRecoverContact}>Recover</Button>
       <Button sx={{color:"black" ,backgroundColor:"red", margin:"10px"}} onClick={handleLogout}>Log Out</Button>

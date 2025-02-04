@@ -42,7 +42,7 @@ const Body = () => {
   const [relation, setRelation] = useState();
   const isLoading = useSelector((state) => state.contact.isLoading);
   const currentUser = useSelector((state) => state.auth.currentUser);
-  const user_id = currentUser.data.user._id;
+  const user_id = currentUser.user._id;
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState(5);
@@ -73,40 +73,25 @@ const Body = () => {
     }
   }
 
-  // const handleInputChange = (event) => {
-  //   setSearch(event.target.value);
-  //   debouncedResults(event.target.value);
-  // };
-  // const debouncedResults = useMemo(() => {
-  //   return debounce(handleInputChange, 300);
-  // }, []);
-
-  // useEffect(() => {
-  //   return () => {
-  //     debouncedResults.cancel();
-  //   };
-  // });
 
 
   const useDebouncedValue = (inputValue, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(inputValue);
-  
+
     useEffect(() => {
       const handler = setTimeout(() => {
         setDebouncedValue(inputValue);
       }, delay);
-  
+
       return () => {
         clearTimeout(handler);
       };
     }, [inputValue, delay]);
-  
+
     return debouncedValue;
   };
-  
+
   const debouncedSearchTerm = useDebouncedValue(search, 500);
-
-
 
   useEffect(() => {
     dispatch(listRelation());
@@ -117,7 +102,8 @@ const Body = () => {
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 400,
-    height: 450,
+    minHeight: 390,
+    maxHeight: 400,
     bgcolor: "rgb(255, 255, 255)",
     color: "black",
     p: 6,
@@ -177,9 +163,6 @@ const Body = () => {
           favourite: input.favourite,
         })
       );
-    
-
-     
     } else {
       dispatch(
         updateContact({
@@ -245,7 +228,6 @@ const Body = () => {
   function handleDelete(id) {
     console.log("delete", id);
     dispatch(deleteContact(id));
-  
   }
 
   function clearFilters() {
@@ -298,7 +280,7 @@ const Body = () => {
       setOpenChildAddModal(true);
     }
   }
-  
+
   useEffect(() => {
     dispatch(
       listContact({
@@ -310,19 +292,27 @@ const Body = () => {
         favourite,
       })
     );
-  }, [ limit, page, user_id, relation, favourite ,debouncedSearchTerm ,totalContacts ]);
+  }, [
+    limit,
+    page,
+    user_id,
+    relation,
+    favourite,
+    debouncedSearchTerm,
+    totalContacts,
+  ]);
 
   return (
     <Box className="body">
       <Box className="filters">
         <TextField
-        sx={{margin:"8px" ,minWidth: 150 ,width:"300px"}}
+          sx={{ margin: "8px", minWidth: 150, width: "300px" }}
           label="search"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
           size="small"
         />
-        <FormControl sx={{ m: 1, minWidth: 150 ,width:"300px"}} size="small">
+        <FormControl sx={{ m: 1, minWidth: 150, width: "300px" }} size="small">
           <InputLabel id="demo-select-small-label">Relations</InputLabel>
           <Select
             labelId="demo-select-small-label"
@@ -330,7 +320,7 @@ const Body = () => {
             value={relation ? relation : ""}
             label="Relations"
             onChange={handleChangeRelation}
-            sx={{ height: "40px"  }}
+            sx={{ height: "40px" }}
           >
             <MenuItem value={null}>
               <em>None</em>
@@ -349,14 +339,14 @@ const Body = () => {
           label="Favourite"
         />
         <Button
-          sx={{ height: "40px" ,marginRight:"5px" }}
+          sx={{ height: "40px", marginRight: "5px" }}
           variant="contained"
           onClick={() => clearFilters()}
         >
           Clear
         </Button>
         <Button
-          sx={{ height: "40px"  ,marginLeft : "5px"}}
+          sx={{ height: "40px", marginLeft: "5px" }}
           variant="contained"
           onClick={() => setOpenModal(true)}
         >

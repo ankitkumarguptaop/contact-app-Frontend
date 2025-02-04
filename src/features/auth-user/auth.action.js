@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {signinUserService ,signupUserService} from "../../services/auth.service"
-import {signin ,signup} from "./auth.type"
+import {googleAuthUserService, signinUserService ,signupUserService} from "../../services/auth.service"
+import {signin ,signup ,googleAuthentication} from "./auth.type"
 import axios from "axios";
 
 export const signUpUser = createAsyncThunk(
@@ -27,4 +27,18 @@ export const signInUser = createAsyncThunk(
     console.log("res data", data);
     return res;
   }
+);
+
+
+export const googleAuth = createAsyncThunk(
+  googleAuthentication,
+async (googleAuthData) => {
+  const res = await axios.post(
+      googleAuthUserService(),
+      googleAuthData
+  );
+  const data = res.data;
+  console.log("res data", data);
+  return data;
+}
 );
