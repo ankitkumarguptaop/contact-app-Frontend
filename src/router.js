@@ -42,6 +42,12 @@ const Router = () => {
             <SignUp />
           </PrivateRouteAuth>
         }
+        // children={
+        //   [{
+        //     path:"",
+        //     c
+        //   }]
+        // }
       />
       <Route
         path="/home"

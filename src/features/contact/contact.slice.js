@@ -9,6 +9,7 @@ import {
 
 const initialState = {
   contacts: [],
+  allContacts: [],
   page: 0,
   totalContacts: 0,
   isLoading: false,
@@ -18,7 +19,12 @@ const initialState = {
 export const contactSlice = createSlice({
   name: "contacts",
   initialState,
-  reducers: {},
+  reducers: {
+    // addContacts :(state ,action)=>{
+    //   state.allContacts=[...state.allContacts,...state.contacts]
+    //   console.log("all contacts =>... " , state.allContacts)
+    // }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(listContact.pending, (state) => {
@@ -26,9 +32,15 @@ export const contactSlice = createSlice({
       })
       .addCase(listContact.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.contacts = action.payload.contacts;
         state.page = action.payload.page;
+        if(state.page!==0 ){
+          state.contacts = [...state.contacts, ...action.payload.contacts];
+        }
+        else{
+          state.contacts = [...action.payload.contacts];
+        }
         state.totalContacts = action.payload.totalContacts;
+        console.log("totalContacts",  state.totalContacts )
       })
       .addCase(listContact.rejected, (state, action) => {
         state.isLoading = false;
@@ -39,8 +51,9 @@ export const contactSlice = createSlice({
       })
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.contacts = state.contacts.filter((contact)=> contact._id!==action.payload.contact._id)
-        // console.log(state.contacts ,"jnk",action.payload.contact._id)
+        state.contacts = state.contacts.filter(
+          (contact) => contact._id !== action.payload.contact._id
+        );
         state.totalContacts = parseInt(state.totalContacts) - 1;
       })
       .addCase(deleteContact.rejected, (state, action) => {
@@ -86,5 +99,7 @@ export const contactSlice = createSlice({
       });
   },
 });
+
+export const { addContacts } = contactSlice.actions;
 
 export default contactSlice.reducer;

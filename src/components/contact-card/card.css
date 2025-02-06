@@ -1,0 +1,12 @@
+
+
+.cart-container{
+    margin:10px ;
+    max-width: 100vw;
+}
+
+.card-favourite{
+    display: flex;
+    align-items: center;
+    
+}

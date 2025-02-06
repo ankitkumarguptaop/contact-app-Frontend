@@ -22,7 +22,7 @@ import {
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   listContact,
@@ -33,10 +33,13 @@ import {
 import { listRelation } from "../../features/relation/relation.action";
 import "./body.css";
 import CustomInput from "../input/input";
-import debounce from "lodash.debounce";
+import ContactCard from "../contact-card/card";
+
 const Body = () => {
   const dispatch = useDispatch();
   const contacts = useSelector((state) => state.contact.contacts);
+  const allContacts = useSelector((state) => state.contact.allContacts);
+  console.log("allContacts", allContacts, "contacts", contacts);
   const totalContacts = useSelector((state) => state.contact.totalContacts);
   const relations = useSelector((state) => state.relation.relations);
   const [relation, setRelation] = useState();
@@ -46,7 +49,7 @@ const Body = () => {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState(5);
-  const [contactId, setContactId] = useState(5);
+  const [contactId, setContactId] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openChildAddModal, setOpenChildAddModal] = useState(false);
   const [favourite, setfavourite] = useState(false);
@@ -68,12 +71,12 @@ const Body = () => {
   function handleChangeRelation(e) {
     if (e.target.value) {
       setRelation(e.target.value);
+      setPage(0);
     } else {
       setRelation();
+      setPage(0);
     }
   }
-
-
 
   const useDebouncedValue = (inputValue, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(inputValue);
@@ -97,13 +100,33 @@ const Body = () => {
     dispatch(listRelation());
   }, []);
 
+  useEffect(() => {
+   
+      dispatch(
+        listContact({
+          user_id,
+          search,
+          page,
+          limit,
+          relation,
+          favourite,
+        })
+      );
+
+    
+
+
+   
+  }, [limit, page, user_id, relation, favourite, debouncedSearchTerm]);
+
   const parentStyle = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
-    minHeight: 390,
-    maxHeight: 400,
+    width: "26vw",
+    minWidth: "250px",
+    minHeight: 380,
+    maxHeight: "auto",
     bgcolor: "rgb(255, 255, 255)",
     color: "black",
     p: 6,
@@ -212,6 +235,7 @@ const Body = () => {
   function handleSelectFavourite(e) {
     setInput({ ...input, favourite: !input.favourite });
   }
+
   function handleEditState(contact) {
     setEditState(true);
     setOpenModal(true);
@@ -238,6 +262,7 @@ const Body = () => {
   }
 
   function filterFavourite() {
+    setPage(0);
     setfavourite(!favourite);
   }
 
@@ -280,39 +305,41 @@ const Body = () => {
       setOpenChildAddModal(true);
     }
   }
+ 
 
+  
+  function handleScroll() {
+    if (isLoading || ((totalContacts/limit ) && page >= (totalContacts/limit )+1)) return;
+  
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.scrollHeight
+    ) {  
+      setPage((prevPage) => prevPage + 1);
+    }
+  }
+  
   useEffect(() => {
-    dispatch(
-      listContact({
-        user_id,
-        search,
-        page,
-        limit,
-        relation,
-        favourite,
-      })
-    );
-  }, [
-    limit,
-    page,
-    user_id,
-    relation,
-    favourite,
-    debouncedSearchTerm,
-    totalContacts,
-  ]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading, limit,totalContacts]); 
+  
+  
 
   return (
     <Box className="body">
       <Box className="filters">
         <TextField
-          sx={{ margin: "8px", minWidth: 150, width: "300px" }}
+          sx={{ margin: "8px", minWidth: 90, width: "300px" }}
           label="search"
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(0);
+          }}
           value={search}
           size="small"
         />
-        <FormControl sx={{ m: 1, minWidth: 150, width: "300px" }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 90, width: "300px" }} size="small">
           <InputLabel id="demo-select-small-label">Relations</InputLabel>
           <Select
             labelId="demo-select-small-label"
@@ -335,25 +362,32 @@ const Body = () => {
           </Select>
         </FormControl>
         <FormControlLabel
-          control={<Checkbox checked={favourite} onChange={filterFavourite} />}
+          control={
+            <Checkbox
+              sx={{ margin: "4px", marginLeft: "8px" }}
+              checked={favourite}
+              onChange={filterFavourite}
+            />
+          }
           label="Favourite"
         />
-        <Button
-          sx={{ height: "40px", marginRight: "5px" }}
-          variant="contained"
-          onClick={() => clearFilters()}
-        >
-          Clear
-        </Button>
-        <Button
-          sx={{ height: "40px", marginLeft: "5px" }}
-          variant="contained"
-          onClick={() => setOpenModal(true)}
-        >
-          Add
-        </Button>
+        <Box className="add-clear-button">
+          <Button
+            sx={{ height: "40px", marginRight: "5px" }}
+            variant="contained"
+            onClick={() => clearFilters()}
+          >
+            Clear
+          </Button>
+          <Button
+            sx={{ height: "40px", marginLeft: "5px" }}
+            variant="contained"
+            onClick={() => setOpenModal(true)}
+          >
+            Add
+          </Button>
+        </Box>
       </Box>
-
       <FormControl className="form">
         <Modal sx={parentStyle} open={openModal} onClose={handleCloseModal}>
           <Box className="modal-background">
@@ -421,7 +455,7 @@ const Body = () => {
                   </Box>
                 )}
                 <FormControl
-                  sx={{ marginTop: "5px", minWidth: 120 }}
+                  sx={{ marginTop: "5px", minWidth: 120, width: "95%" }}
                   size="small"
                   error={error.relation}
                 >
@@ -436,7 +470,7 @@ const Body = () => {
                     onChange={(e) =>
                       setInput({ ...input, relation: e.target.value })
                     }
-                    sx={{ width: "380px", height: "40px" }}
+                    sx={{ width: "100%", height: "40px", minWidth: "150px" }}
                     label={"Relation"}
                   >
                     {relations &&
@@ -528,7 +562,10 @@ const Body = () => {
       {isLoading ? (
         <Box className="loader"></Box>
       ) : (
-        <Paper sx={{ width: "90%", overflow: "hidden" }}>
+        <Paper
+          className="contact-table"
+          sx={{ width: "90%", overflow: "hidden" }}
+        >
           <TableContainer sx={{ maxHeight: 450 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
@@ -617,6 +654,20 @@ const Body = () => {
           />
         </Paper>
       )}
+   <Box className="contact-card">
+        {contacts &&
+          contacts.map((contact) => (
+            <ContactCard
+              name={`${contact.first_name} ${contact.last_name}`}
+              relation={contact.relation_id.relation_type}
+              favourite={contact.favourite}
+              phone_no={contact.phone_no}
+              handleDelete={() => handleDelete(contact._id)}
+              handleEdit={() => handleEditState(contact)}
+            ></ContactCard>
+          ))}
+      </Box>
+    
     </Box>
   );
 };

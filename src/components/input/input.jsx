@@ -21,7 +21,7 @@ const CustomInput = ({ errorState, handlerState, className, label, value }) => {
         },
         color: "black",
          margin:"0px",
-         minWidth:"300px",
+         minWidth:"150px",
       }}
       onChange={handlerState}
     />

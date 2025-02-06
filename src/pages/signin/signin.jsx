@@ -253,7 +253,7 @@ const Signin = () => {
                   }}
                   className="sinup-button"
                 >
-                  Create an account
+                  Log In
                 </Button>
               </form>
               <Box className="signin-link">

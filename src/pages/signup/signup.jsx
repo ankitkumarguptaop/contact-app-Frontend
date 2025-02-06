@@ -17,6 +17,7 @@ const Signup = () => {
 
   const dispatch = useDispatch();
   const signUpError = useSelector((state) => state.auth.error);
+  const [picture ,setPicture]= useState("")
 
   const [input, setInput] = useState({
     firstName: "",
@@ -211,13 +212,24 @@ const Signup = () => {
       !currentPasswordError
     ) {
       try {
-        const data = {
-          first_name: input.firstName,
-          last_name: input.lastName,
-          password: input.password,
-          email: input.email,
-        };
-        dispatch(signUpUser(data));
+
+
+       
+
+        // const data = {
+        //   first_name: input.firstName,
+        //   last_name: input.lastName,
+        //   password: input.password,
+        //   email: input.email,
+        // };
+
+        const formdata = new FormData();
+        formdata.append('picture', picture)
+        formdata.append("first_name" ,input.firstName)
+        formdata.append("last_name" ,input.lastName)
+        formdata.append("password",input.password)
+        formdata.append("email",input.email)
+        dispatch(signUpUser(formdata));
         setInput({
           firstName: "",
           lastName: "",
@@ -240,6 +252,10 @@ const Signup = () => {
   function handelClose() {
     dispatch(removeError());
   }
+
+
+  
+
 
   return (
     <Box className="container">
@@ -343,7 +359,7 @@ const Signup = () => {
                 </Box>
               )}
                 <Box className="upload-picture">
-                 <input type="file" name="picture"/>
+                 <input type="file" name="picture" onChange={(e) => (setPicture(e.target.files[0]))}/>
                 </Box>
               <Box className="feature-container">
                 <Box className="check-box">
