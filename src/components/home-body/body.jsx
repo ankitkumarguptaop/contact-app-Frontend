@@ -40,7 +40,7 @@ const Body = () => {
   const contacts = useSelector((state) => state.contact.contacts);
   const totalContacts = useSelector((state) => state.contact.totalContacts);
   const relations = useSelector((state) => state.relation.relations);
-  const [relation, setRelation] = useState();
+  const [relation, setRelation] = useState("");
   const isLoading = useSelector((state) => state.contact.isLoading);
   const currentUser = useSelector((state) => state.auth.currentUser);
   const user_id = currentUser.user._id;
@@ -70,11 +70,10 @@ const Body = () => {
   function handleChangeRelation(e) {
     if (e.target.value) {
       setRelation(e.target.value);
-      setPage(0);
     } else {
-      setRelation();
-      setPage(0);
+      setRelation("");
     }
+    setPage(0);
   }
 
   const useDebouncedValue = (inputValue, delay) => {
@@ -363,7 +362,7 @@ const Body = () => {
             onChange={handleChangeRelation}
             sx={{ height: "40px" }}
           >
-            <MenuItem value={null}>
+            <MenuItem value={""}>
               <em>None</em>
             </MenuItem>
 
