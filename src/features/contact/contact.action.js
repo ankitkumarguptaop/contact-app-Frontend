@@ -26,7 +26,7 @@ export const listContact = createAsyncThunk(
     } catch (error) {
       console.log({ errorMessage: error });
     }
-  }
+  },
 );
 
 export const deleteContact = createAsyncThunk(
@@ -36,35 +36,35 @@ export const deleteContact = createAsyncThunk(
     const data = res.data;
     console.log("res data", data);
     return data;
-  }
+  },
 );
 
 export const updateContact = createAsyncThunk(
   updateContactType,
   async (payload) => {
-    const res = await updateContactService(payload)
+    const res = await updateContactService(payload);
     const data = res.data;
     console.log("res data", data);
     return data;
-  }
+  },
 );
 
 export const recoverContacts = createAsyncThunk(
   recoverContactType,
   async () => {
-    const res = await recoverContactService()
+    const res = await recoverContactService();
     const data = res.data;
     console.log("res data", data);
     return data;
-  }
+  },
 );
 
 export const createContact = createAsyncThunk(
   createContactType,
   async (contactData) => {
-    const res = await createContactService(contactData)
+    const res = await createContactService(contactData);
     const data = res.data;
     console.log("res data", data);
     return data;
-  }
+  },
 );

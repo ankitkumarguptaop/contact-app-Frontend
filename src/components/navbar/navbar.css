@@ -35,36 +35,26 @@
   }
 }
 
-
-
 @media only screen and (max-width: 600px) {
-
   .left-items {
-    margin-left: 15px; 
-    height: 100%; 
+    margin-left: 15px;
+    height: 100%;
     display: flex;
     align-items: center;
-     .contact-management-text{
+    .contact-management-text {
       display: none;
     }
-    
   }
-
 }
 
-
-
 @media only screen and (max-width: 450px) {
-
   .right-items {
     margin-right: 15px;
     height: 100%;
     display: flex;
     align-items: center;
-    .display-name{
+    .display-name {
       display: none;
     }
-    
   }
-
 }

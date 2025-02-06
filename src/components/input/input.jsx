@@ -13,15 +13,14 @@ const CustomInput = ({ errorState, handlerState, className, label, value }) => {
       size="small"
       sx={{
         input: {
-         
           height: "22px",
           borderRadius: "6px",
           color: "black",
-          margin:"0px"
+          margin: "0px",
         },
         color: "black",
-         margin:"0px",
-         minWidth:"150px",
+        margin: "0px",
+        minWidth: "150px",
       }}
       onChange={handlerState}
     />

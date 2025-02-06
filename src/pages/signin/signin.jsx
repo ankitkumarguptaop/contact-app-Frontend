@@ -116,8 +116,8 @@ const Signin = () => {
 
         dispatch(signInUser(data));
 
-         const token = currentUser.token;
-        Cookies.set("jwt", token , { expires: 7, secure: true });
+        const token = currentUser.token;
+        Cookies.set("jwt", token, { expires: 7, secure: true });
         setInput({
           firstName: "",
           lastName: "",
@@ -169,7 +169,6 @@ const Signin = () => {
                   <CustomInput
                     value={input.email}
                     errorState={error.emailError}
-                    className="input-email"
                     handlerState={handleEmail}
                     label="Email"
                   ></CustomInput>
@@ -190,7 +189,6 @@ const Signin = () => {
                   <CustomInput
                     value={input.password}
                     errorState={error.passwordError}
-                    className="input-password"
                     handlerState={handlePassword}
                     label="Password"
                   ></CustomInput>
@@ -237,12 +235,11 @@ const Signin = () => {
                 </Box>
                 <Button
                   onClick={handleSignUp}
-                  // diableripple
                   disableElevation
                   sx={{
                     bgcolor: "#7754f6",
                     color: "#FFFFFF",
-                    width: "25vw",
+                    width: "380px",
                     height: "45px",
                     marginTop: "-5px",
                     borderRadius: "5px",
@@ -261,7 +258,7 @@ const Signin = () => {
                 </Box>
               </Box>
             </Box>
-       <Auth></Auth>
+            <Auth></Auth>
           </Box>
         </Box>
       </Box>

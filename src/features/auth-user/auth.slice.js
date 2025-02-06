@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signInUser, signUpUser ,googleAuth } from "./auth.action";
+import { signInUser, signUpUser, googleAuth } from "./auth.action";
 import Cookies from "js-cookie";
 const initialState = {
   currentUser: null,
@@ -35,8 +35,11 @@ export const authUserSlice = createSlice({
       })
       .addCase(signInUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.currentUser = {...action.payload.data};
-        Cookies.set("jwt", action.payload.data.token , { expires: 7, secure: true });
+        state.currentUser = { ...action.payload.data };
+        Cookies.set("jwt", action.payload.data.token, {
+          expires: 7,
+          secure: true,
+        });
         console.log("cutrrent ", action.payload);
       })
       .addCase(signInUser.rejected, (state, action) => {
@@ -49,7 +52,7 @@ export const authUserSlice = createSlice({
       .addCase(googleAuth.fulfilled, (state, action) => {
         state.isLoading = false;
         state.currentUser = action.payload;
-        console.log( state.currentUser)
+        console.log(state.currentUser);
       })
       .addCase(googleAuth.rejected, (state, action) => {
         state.isLoading = false;

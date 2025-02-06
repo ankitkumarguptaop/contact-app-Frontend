@@ -25,32 +25,33 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  listContact,
   createContact,
   deleteContact,
   updateContact,
+  listContact,
 } from "../../features/contact/contact.action";
 import { listRelation } from "../../features/relation/relation.action";
 import "./body.css";
 import CustomInput from "../input/input";
 import ContactCard from "../contact-card/card";
 
-const Body = () => {
+const Body = ({ page, setPage }) => {
   const dispatch = useDispatch();
   const contacts = useSelector((state) => state.contact.contacts);
   const totalContacts = useSelector((state) => state.contact.totalContacts);
   const relations = useSelector((state) => state.relation.relations);
-  const [relation, setRelation] = useState("");
   const isLoading = useSelector((state) => state.contact.isLoading);
   const currentUser = useSelector((state) => state.auth.currentUser);
   const user_id = currentUser.user._id;
-  const [page, setPage] = useState(0);
-  const [search, setSearch] = useState("");
-  const [limit, setLimit] = useState(5);
+  const [filters, setFilters] = useState({
+    relation: "",
+    search: "",
+    limit: 5,
+    favourite: false,
+  });
   const [contactId, setContactId] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openChildAddModal, setOpenChildAddModal] = useState(false);
-  const [favourite, setfavourite] = useState(false);
   const [deleteState, setDeleteState] = useState(false);
   const [input, setInput] = useState({
     first_name: "",
@@ -69,9 +70,9 @@ const Body = () => {
 
   function handleChangeRelation(e) {
     if (e.target.value) {
-      setRelation(e.target.value);
+      setFilters({ ...filters, relation: e.target.value });
     } else {
-      setRelation("");
+      setFilters({ ...filters, relation: "" });
     }
     setPage(0);
   }
@@ -92,7 +93,7 @@ const Body = () => {
     return debouncedValue;
   };
 
-  const debouncedSearchTerm = useDebouncedValue(search, 500);
+  const debouncedSearchTerm = useDebouncedValue(filters.search, 500);
 
   useEffect(() => {
     dispatch(listRelation());
@@ -102,14 +103,22 @@ const Body = () => {
     dispatch(
       listContact({
         user_id,
-        search,
+        search: filters.search,
         page,
-        limit,
-        relation,
-        favourite,
-      })
+        limit: filters.limit,
+        relation: filters.relation,
+        favourite: filters.favourite,
+      }),
     );
-  }, [limit, page, user_id, relation, favourite, debouncedSearchTerm]);
+  }, [
+    filters.limit,
+    page,
+    user_id,
+    filters.relation,
+    filters.favourite,
+    debouncedSearchTerm,
+    totalContacts,
+  ]);
 
   const parentStyle = {
     top: "50%",
@@ -163,23 +172,13 @@ const Body = () => {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setLimit(event.target.value);
+    setFilters({ ...filters, limit: event.target.value });
     setPage(0);
   };
 
   function addOrEditOrDeleteContacts() {
     if (deleteState) {
       dispatch(deleteContact(contactId));
-      dispatch(
-        listContact({
-          user_id,
-          search,
-          page,
-          limit,
-          relation,
-          favourite,
-        })
-      );
     } else if (!editState) {
       dispatch(
         createContact({
@@ -189,7 +188,7 @@ const Body = () => {
           phone_no: input.phone_no,
           user_id: user_id,
           favourite: input.favourite,
-        })
+        }),
       );
     } else {
       dispatch(
@@ -203,7 +202,7 @@ const Body = () => {
             favourite: input.favourite,
           },
           contact_id: contactId,
-        })
+        }),
       );
     }
     setInput({
@@ -264,14 +263,16 @@ const Body = () => {
 
   function clearFilters() {
     setPage(0);
-    setRelation("");
-    setSearch("");
-    setfavourite(false);
+    setFilters({
+      relation: "",
+      favourite: false,
+      search: "",
+    });
   }
 
   function filterFavourite() {
     setPage(0);
-    setfavourite(!favourite);
+    setFilters({ ...filters, favourite: !filters.favourite });
   }
 
   function handleErrorHandling() {
@@ -317,7 +318,8 @@ const Body = () => {
   function handleScroll() {
     if (
       isLoading ||
-      (totalContacts / limit && page >= totalContacts / limit - 1)
+      (totalContacts / filters.limit &&
+        page >= totalContacts / filters.limit - 1)
     )
       return;
 
@@ -332,7 +334,7 @@ const Body = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isLoading, limit, totalContacts]);
+  }, [isLoading, filters.limit]);
 
   return (
     <Box className="body">
@@ -345,11 +347,11 @@ const Body = () => {
               e.target.value.replace(/\s+/g, " ").trim().length > 0 ||
               e.target.value.length === 0
             ) {
-              setSearch(e.target.value);
+              setFilters({ ...filters, search: e.target.value });
             }
             setPage(0);
           }}
-          value={search}
+          value={filters.search}
           size="small"
         />
         <FormControl sx={{ m: 1, minWidth: 90, width: "300px" }} size="small">
@@ -357,7 +359,7 @@ const Body = () => {
           <Select
             labelId="demo-select-small-label"
             id="demo-select-small"
-            value={relation ? relation : ""}
+            value={filters.relation ? filters.relation : ""}
             label="Relations"
             onChange={handleChangeRelation}
             sx={{ height: "40px" }}
@@ -378,7 +380,7 @@ const Body = () => {
           control={
             <Checkbox
               sx={{ margin: "4px", marginLeft: "8px" }}
-              checked={favourite}
+              checked={filters.favourite}
               onChange={filterFavourite}
             />
           }
@@ -556,8 +558,8 @@ const Body = () => {
               {editState
                 ? "Do you want to Edit Contact? "
                 : deleteState
-                ? "Do you want to Delete this Contact ?"
-                : "Do you want to Add Contact ?"}
+                  ? "Do you want to Delete this Contact ?"
+                  : "Do you want to Add Contact ?"}
             </Typography>
             <Box className="child-modal-buttons">
               <Button
@@ -663,7 +665,7 @@ const Body = () => {
             rowsPerPageOptions={[5, 10, 100]}
             component="div"
             count={totalContacts}
-            rowsPerPage={limit * (page + 1)}
+            rowsPerPage={filters.limit * (page + 1)}
             page={0}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}

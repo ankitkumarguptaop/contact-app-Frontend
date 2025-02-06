@@ -5,12 +5,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../features/auth-user/auth.slice";
 import { useNavigate } from "react-router-dom";
-import {
-  listContact,
-  recoverContacts,
-} from "../../features/contact/contact.action";
+import { recoverContacts } from "../../features/contact/contact.action";
 
-const Navbar = () => {
+const Navbar = ({ setPage, page }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
@@ -21,9 +18,11 @@ const Navbar = () => {
     if (currentUser.user.picture.startsWith("http")) {
       setPictureUrl(currentUser.user.picture);
     } else {
-      setPictureUrl(`${process.env.REACT_APP_BACKEND_URL}${currentUser.user.picture}`);
+      setPictureUrl(
+        `${process.env.REACT_APP_BACKEND_URL}${currentUser.user.picture}`,
+      );
     }
-  }, [currentUser.user.picture ,currentUser]);
+  }, [currentUser.user.picture, currentUser]);
 
   function handleLogout() {
     dispatch(logout());
@@ -32,7 +31,7 @@ const Navbar = () => {
 
   function handleRecoverContact() {
     dispatch(recoverContacts());
-    dispatch(listContact({ user_id: currentUser.user._id}));
+    setPage(0);
   }
 
   console.log("picture", currentUser.user.picture);
@@ -41,7 +40,8 @@ const Navbar = () => {
     <Box className="navbar">
       <Box className="left-items">
         <MenuIcon sx={{ color: "white", margin: "10px" }}></MenuIcon>
-        <Typography className="contact-management-text"
+        <Typography
+          className="contact-management-text"
           variant="subtitle1"
           component="h2"
           sx={{ color: "white", margin: "10px" }}
@@ -51,7 +51,12 @@ const Navbar = () => {
       </Box>
       <Box className="right-items">
         <Avatar alt="Remy Sharp" src={pictureUrl} />
-        <Typography className="display-name" variant="subtitle1" component="h2" sx={{ color: "white" }}>
+        <Typography
+          className="display-name"
+          variant="subtitle1"
+          component="h2"
+          sx={{ color: "white" }}
+        >
           {currentUser.user.first_name} {currentUser.user.last_name}
         </Typography>
         <Button
@@ -61,7 +66,7 @@ const Navbar = () => {
           Recover
         </Button>
         <Button
-        className="Logout-button"
+          className="Logout-button"
           sx={{ color: "black", backgroundColor: "red" }}
           onClick={handleLogout}
         >

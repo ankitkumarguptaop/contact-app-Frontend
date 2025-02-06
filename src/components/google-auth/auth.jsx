@@ -17,13 +17,13 @@ const Auth = ({ image }) => {
         toast.success("User successfuly signup!", {
           position: "top-center",
         });
-      
+
         dispatch(
           googleAuth({
             email: result.user.email,
             first_name: result.user.displayName,
-            picture:result.user.photoURL
-          })
+            picture: result.user.photoURL,
+          }),
         );
         navigate("/home");
       }
@@ -32,7 +32,7 @@ const Auth = ({ image }) => {
   return (
     <>
       <Button
-        sx={{ backgroundColor: "transparent" ,marginTop:"5px" }}
+        sx={{ backgroundColor: "transparent", marginTop: "5px" }}
         onClick={handleGoogleAuthentication}
       >
         <img style={{ height: "50px", width: "370px" }} src={Google} alt="" />

@@ -17,7 +17,7 @@ const Signup = () => {
 
   const dispatch = useDispatch();
   const signUpError = useSelector((state) => state.auth.error);
-  const [picture ,setPicture]= useState("")
+  const [picture, setPicture] = useState("");
 
   const [input, setInput] = useState({
     firstName: "",
@@ -212,23 +212,12 @@ const Signup = () => {
       !currentPasswordError
     ) {
       try {
-
-
-       
-
-        // const data = {
-        //   first_name: input.firstName,
-        //   last_name: input.lastName,
-        //   password: input.password,
-        //   email: input.email,
-        // };
-
         const formdata = new FormData();
-        formdata.append('picture', picture)
-        formdata.append("first_name" ,input.firstName)
-        formdata.append("last_name" ,input.lastName)
-        formdata.append("password",input.password)
-        formdata.append("email",input.email)
+        formdata.append("picture", picture);
+        formdata.append("first_name", input.firstName);
+        formdata.append("last_name", input.lastName);
+        formdata.append("password", input.password);
+        formdata.append("email", input.email);
         dispatch(signUpUser(formdata));
         setInput({
           firstName: "",
@@ -252,10 +241,6 @@ const Signup = () => {
   function handelClose() {
     dispatch(removeError());
   }
-
-
-  
-
 
   return (
     <Box className="container">
@@ -283,7 +268,6 @@ const Signup = () => {
                 <CustomInput
                   value={input.firstName}
                   errorState={error.firstNameError}
-                  className="input-password"
                   handlerState={handleFirstName}
                   label="First Name"
                 ></CustomInput>
@@ -303,7 +287,7 @@ const Signup = () => {
                 <CustomInput
                   value={input.lastName}
                   errorState={error.lastNameError}
-                  className="input-password"
+                  // className="input-password"
                   handlerState={handleLastName}
                   label="Last Name"
                 ></CustomInput>
@@ -322,7 +306,7 @@ const Signup = () => {
                 <CustomInput
                   value={input.email}
                   errorState={error.emailError}
-                  className="input-password"
+                  // className="input-password"
                   handlerState={handleEmail}
                   label="Email "
                 ></CustomInput>
@@ -342,7 +326,7 @@ const Signup = () => {
                 <CustomInput
                   value={input.password}
                   errorState={error.passwordError}
-                  className="input-password"
+                  // className="input-password"
                   handlerState={handlePassword}
                   label="Password"
                 ></CustomInput>
@@ -358,9 +342,13 @@ const Signup = () => {
                   Enter correct password
                 </Box>
               )}
-                <Box className="upload-picture">
-                 <input type="file" name="picture" onChange={(e) => (setPicture(e.target.files[0]))}/>
-                </Box>
+              <Box className="upload-picture">
+                <input
+                  type="file"
+                  name="picture"
+                  onChange={(e) => setPicture(e.target.files[0])}
+                />
+              </Box>
               <Box className="feature-container">
                 <Box className="check-box">
                   <Checkbox
@@ -388,7 +376,6 @@ const Signup = () => {
                     </Box>
                   )}
                 </Box>
-              
               </Box>
               <Button
                 onClick={handleSignUp}
@@ -397,6 +384,7 @@ const Signup = () => {
                 sx={{
                   bgcolor: "#7754f6",
                   color: "#FFFFFF",
+                  minWidth: "400px",
                   width: "25vw",
                   height: "45px",
                   marginTop: "-5px",

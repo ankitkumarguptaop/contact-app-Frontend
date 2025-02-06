@@ -46,5 +46,5 @@ export const updateUser = createAsyncThunk(
     const data = res.data;
     console.log("res data", data);
     return data;
-  }
+  },
 );

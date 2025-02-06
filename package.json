@@ -15,6 +15,7 @@
     "firebase": "^11.2.0",
     "js-cookie": "^3.0.5",
     "lodash.debounce": "^4.0.8",
+    "prettier": "^3.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
@@ -26,6 +27,7 @@
     "use-debounce": "^10.0.4"
   },
   "scripts": {
+    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

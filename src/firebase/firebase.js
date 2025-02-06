@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import{getAuth} from "firebase/auth"
+import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,11 +13,11 @@ const firebaseConfig = {
   storageBucket: "contact-management-app-afb8a.firebasestorage.app",
   messagingSenderId: "103715957625",
   appId: "1:103715957625:web:60ced406009bbe80f51da8",
-  measurementId: "G-CZDMV3QSWT"
+  measurementId: "G-CZDMV3QSWT",
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth =getAuth(app)
+export const auth = getAuth(app);
 export const analytics = getAnalytics(app);
 
 export default app;

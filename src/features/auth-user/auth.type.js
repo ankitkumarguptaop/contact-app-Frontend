@@ -1,3 +1,3 @@
-export const  signup ="SIGNUP/USERS";
-export const  signin ="SIGNIN/USERS";
-export const  googleAuthentication ="GOOGLEAUTH/USERS";
+export const signup = "SIGNUP/USERS";
+export const signin = "SIGNIN/USERS";
+export const googleAuthentication = "GOOGLEAUTH/USERS";
