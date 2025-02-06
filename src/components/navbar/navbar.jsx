@@ -23,7 +23,7 @@ const Navbar = () => {
     } else {
       setPictureUrl(`http://localhost:8080/${currentUser.user.picture}`);
     }
-  }, [currentUser.user.picture]);
+  }, [currentUser.user.picture ,currentUser]);
 
   function handleLogout() {
     dispatch(logout());
@@ -32,7 +32,7 @@ const Navbar = () => {
 
   function handleRecoverContact() {
     dispatch(recoverContacts());
-    dispatch(listContact({ user_id: currentUser.user._id }));
+    dispatch(listContact({ user_id: currentUser.user._id}));
   }
 
   console.log("picture", currentUser.user.picture);

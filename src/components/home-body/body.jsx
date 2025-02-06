@@ -22,7 +22,7 @@ import {
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   listContact,
@@ -53,6 +53,7 @@ const Body = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openChildAddModal, setOpenChildAddModal] = useState(false);
   const [favourite, setfavourite] = useState(false);
+  const [deleteState, setDeleteState] = useState(false);
   const [input, setInput] = useState({
     first_name: "",
     last_name: "",
@@ -101,22 +102,16 @@ const Body = () => {
   }, []);
 
   useEffect(() => {
-   
-      dispatch(
-        listContact({
-          user_id,
-          search,
-          page,
-          limit,
-          relation,
-          favourite,
-        })
-      );
-
-    
-
-
-   
+    dispatch(
+      listContact({
+        user_id,
+        search,
+        page,
+        limit,
+        relation,
+        favourite,
+      })
+    );
   }, [limit, page, user_id, relation, favourite, debouncedSearchTerm]);
 
   const parentStyle = {
@@ -166,7 +161,8 @@ const Body = () => {
   ];
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+    console.log(page);
+    setPage(page + 1);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -174,8 +170,20 @@ const Body = () => {
     setPage(0);
   };
 
-  function addOrEditContacts() {
-    if (!editState) {
+  function addOrEditOrDeleteContacts() {
+    if (deleteState) {
+      dispatch(deleteContact(contactId));
+      dispatch(
+        listContact({
+          user_id,
+          search,
+          page,
+          limit,
+          relation,
+          favourite,
+        })
+      );
+    } else if (!editState) {
       dispatch(
         createContact({
           relation_id: input.relation,
@@ -210,6 +218,7 @@ const Body = () => {
     });
     setOpenModal(false);
     setEditState(false);
+    setDeleteState(false);
     setOpenChildAddModal(false);
   }
 
@@ -249,9 +258,11 @@ const Body = () => {
     });
   }
 
-  function handleDelete(id) {
+  function handleDeleteState(id) {
+    setOpenChildAddModal(true);
+    setContactId(id);
+    setDeleteState(true);
     console.log("delete", id);
-    dispatch(deleteContact(id));
   }
 
   function clearFilters() {
@@ -305,26 +316,26 @@ const Body = () => {
       setOpenChildAddModal(true);
     }
   }
- 
 
-  
   function handleScroll() {
-    if (isLoading || ((totalContacts/limit ) && page >= (totalContacts/limit )+1)) return;
-  
+    if (
+      isLoading ||
+      (totalContacts / limit && page >= totalContacts / limit - 1)
+    )
+      return;
+
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
       document.documentElement.scrollHeight
-    ) {  
-      setPage((prevPage) => prevPage + 1);
+    ) {
+      setPage(page + 1);
     }
   }
-  
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isLoading, limit,totalContacts]); 
-  
-  
+  }, [isLoading, limit, totalContacts]);
 
   return (
     <Box className="body">
@@ -333,7 +344,9 @@ const Body = () => {
           sx={{ margin: "8px", minWidth: 90, width: "300px" }}
           label="search"
           onChange={(e) => {
-            setSearch(e.target.value);
+            if(e.target.value.replace(/\s+/g, " ").trim().length > 0 || e.target.value.length===0 ){
+              setSearch(e.target.value);
+            }
             setPage(0);
           }}
           value={search}
@@ -542,10 +555,15 @@ const Body = () => {
             >
               {editState
                 ? "Do you want to Edit Contact? "
+                : deleteState
+                ? "Do you want to Delete this Contact ?"
                 : "Do you want to Add Contact ?"}
             </Typography>
             <Box className="child-modal-buttons">
-              <Button onClick={() => addOrEditContacts()} variant="contained">
+              <Button
+                onClick={() => addOrEditOrDeleteContacts()}
+                variant="contained"
+              >
                 {" "}
                 Yes
               </Button>
@@ -559,9 +577,7 @@ const Body = () => {
           </Box>
         </Modal>
       </FormControl>
-      {isLoading ? (
-        <Box className="loader"></Box>
-      ) : (
+      {!isLoading && (
         <Paper
           className="contact-table"
           sx={{ width: "90%", overflow: "hidden" }}
@@ -622,7 +638,7 @@ const Body = () => {
                                 </ModeEditOutlineIcon>{" "}
                                 <DeleteForeverIcon
                                   sx={{ padding: "5px", cursor: "pointer" }}
-                                  onClick={() => handleDelete(contact._id)}
+                                  onClick={() => handleDeleteState(contact._id)}
                                 ></DeleteForeverIcon>
                               </>
                             );
@@ -644,17 +660,17 @@ const Body = () => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 30]}
+            rowsPerPageOptions={[5, 10, 100]}
             component="div"
             count={totalContacts}
-            rowsPerPage={limit}
-            page={page}
+            rowsPerPage={limit * (page + 1)}
+            page={0}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
       )}
-   <Box className="contact-card">
+      <Box className="contact-card">
         {contacts &&
           contacts.map((contact) => (
             <ContactCard
@@ -662,12 +678,12 @@ const Body = () => {
               relation={contact.relation_id.relation_type}
               favourite={contact.favourite}
               phone_no={contact.phone_no}
-              handleDelete={() => handleDelete(contact._id)}
+              handleDelete={() => handleDeleteState(contact._id)}
               handleEdit={() => handleEditState(contact)}
             ></ContactCard>
           ))}
       </Box>
-    
+      {isLoading && <Box className="loader"></Box>}
     </Box>
   );
 };

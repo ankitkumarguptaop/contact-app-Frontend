@@ -19,12 +19,7 @@ const initialState = {
 export const contactSlice = createSlice({
   name: "contacts",
   initialState,
-  reducers: {
-    // addContacts :(state ,action)=>{
-    //   state.allContacts=[...state.allContacts,...state.contacts]
-    //   console.log("all contacts =>... " , state.allContacts)
-    // }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(listContact.pending, (state) => {
@@ -33,14 +28,13 @@ export const contactSlice = createSlice({
       .addCase(listContact.fulfilled, (state, action) => {
         state.isLoading = false;
         state.page = action.payload.page;
-        if(state.page!==0 ){
+        if (state.page !== 0) {
           state.contacts = [...state.contacts, ...action.payload.contacts];
-        }
-        else{
+        } else {
           state.contacts = [...action.payload.contacts];
         }
         state.totalContacts = action.payload.totalContacts;
-        console.log("totalContacts",  state.totalContacts )
+        console.log("totalContacts", state.totalContacts);
       })
       .addCase(listContact.rejected, (state, action) => {
         state.isLoading = false;
@@ -92,6 +86,7 @@ export const contactSlice = createSlice({
       })
       .addCase(recoverContacts.fulfilled, (state, action) => {
         state.isLoading = false;
+        
       })
       .addCase(recoverContacts.rejected, (state, action) => {
         state.isLoading = false;
