@@ -38,8 +38,6 @@ import ContactCard from "../contact-card/card";
 const Body = () => {
   const dispatch = useDispatch();
   const contacts = useSelector((state) => state.contact.contacts);
-  const allContacts = useSelector((state) => state.contact.allContacts);
-  console.log("allContacts", allContacts, "contacts", contacts);
   const totalContacts = useSelector((state) => state.contact.totalContacts);
   const relations = useSelector((state) => state.relation.relations);
   const [relation, setRelation] = useState();
@@ -344,7 +342,10 @@ const Body = () => {
           sx={{ margin: "8px", minWidth: 90, width: "300px" }}
           label="search"
           onChange={(e) => {
-            if(e.target.value.replace(/\s+/g, " ").trim().length > 0 || e.target.value.length===0 ){
+            if (
+              e.target.value.replace(/\s+/g, " ").trim().length > 0 ||
+              e.target.value.length === 0
+            ) {
               setSearch(e.target.value);
             }
             setPage(0);

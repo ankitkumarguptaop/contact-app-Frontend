@@ -1,6 +1,5 @@
+import axios from "axios";
 
-
-
-exports.listRelationService = (user_id, search, page, limit) => {
-    return `http://localhost:8080/relations`;
+export const listRelationService =  async() => {
+    return await axios.get(`${process.env.REACT_APP_BACKEND_URL}relations`);
   };

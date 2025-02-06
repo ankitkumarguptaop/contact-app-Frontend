@@ -1,13 +1,15 @@
 
-exports.signupUserService = () => {
-  return `http://localhost:8080/auth/signup`;
+import axios from "axios";
+
+export const signupUserService = async( signupData) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_URL}auth/signup`, signupData);
 };
 
-exports.signinUserService = () => {
-  return `http://localhost:8080/auth/signin`;
+export const signinUserService =async (signinData) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_URL}auth/signin`,signinData);
 };
 
 
-exports.googleAuthUserService = () => {
-  return `http://localhost:8080/auth/google`;
+export const googleAuthUserService = (googleAuthData) => {
+  return axios.post(`${process.env.REACT_APP_BACKEND_URL}auth/google` ,googleAuthData);
 };

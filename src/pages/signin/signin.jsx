@@ -117,7 +117,6 @@ const Signin = () => {
         dispatch(signInUser(data));
 
          const token = currentUser.token;
-        // console.log("token", token);
         Cookies.set("jwt", token , { expires: 7, secure: true });
         setInput({
           firstName: "",

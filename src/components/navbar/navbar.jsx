@@ -21,7 +21,7 @@ const Navbar = () => {
     if (currentUser.user.picture.startsWith("http")) {
       setPictureUrl(currentUser.user.picture);
     } else {
-      setPictureUrl(`http://localhost:8080/${currentUser.user.picture}`);
+      setPictureUrl(`${process.env.REACT_APP_BACKEND_URL}${currentUser.user.picture}`);
     }
   }, [currentUser.user.picture ,currentUser]);
 

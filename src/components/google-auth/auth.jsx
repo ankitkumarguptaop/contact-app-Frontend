@@ -13,15 +13,11 @@ const Auth = ({ image }) => {
   function handleGoogleAuthentication() {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then((result) => {
-      console.log(result);
       if (result.user) {
         toast.success("User successfuly signup!", {
           position: "top-center",
         });
-        console.log({
-          email: result.user.email,
-          first_name: result.user.displayName,
-        });
+      
         dispatch(
           googleAuth({
             email: result.user.email,
