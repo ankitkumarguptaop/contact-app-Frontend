@@ -52,7 +52,6 @@ const Signup = () => {
         emailError: error.emailError,
         passwordError: error.passwordError,
         lastNameError: error.lastNameError,
-
         firstNameError: false,
       });
     }
@@ -61,7 +60,6 @@ const Signup = () => {
         emailError: error.emailError,
         passwordError: error.passwordError,
         lastNameError: error.lastNameError,
-
         firstNameError: false,
       });
     }
@@ -139,7 +137,7 @@ const Signup = () => {
       password: e.target.value,
       lastName: input.lastName,
     });
-    var passwordPattern =
+    const passwordPattern =
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/;
     if (!passwordPattern.test(e.target.value)) {
       setError({
@@ -181,7 +179,6 @@ const Signup = () => {
     let currentLastNameError = false;
     if (!emailPattern.test(input.email)) {
       currentEmailError = true;
-      console.log(error);
     }
     if (
       input.firstName.replace(/\s+/g, " ").trim().length <= 0 ||

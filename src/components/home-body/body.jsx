@@ -268,6 +268,7 @@ const Body = ({ page, setPage }) => {
       relation: "",
       favourite: false,
       search: "",
+      limit: filters.limit,
     });
   }
 
@@ -677,6 +678,7 @@ const Body = ({ page, setPage }) => {
         {contacts &&
           contacts.map((contact) => (
             <ContactCard
+              key={contact._id}
               name={`${contact.first_name} ${contact.last_name}`}
               relation={contact.relation_id.relation_type}
               favourite={contact.favourite}

@@ -5,11 +5,12 @@ import {
   createContact,
   recoverContacts,
   listContact,
+  listDeletedContact,
 } from "./contact.action";
 
 const initialState = {
   contacts: [],
-  allContacts: [],
+  deletedContacts: [],
   page: 0,
   totalContacts: 0,
   isLoading: false,
@@ -33,7 +34,7 @@ export const contactSlice = createSlice({
         } else {
           state.contacts = [...action.payload.contacts];
         }
-        state.totalContacts = action.payload.totalContacts;
+        state.totalContacts = parseInt(action.payload.totalContacts);
         console.log("totalContacts", state.totalContacts);
       })
       .addCase(listContact.rejected, (state, action) => {
@@ -84,12 +85,22 @@ export const contactSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(recoverContacts.fulfilled, (state, action) => {
-        console.log(action.payload, "-->");
         state.totalContacts =
           parseInt(state.totalContacts) + parseInt(action.payload.length);
         state.isLoading = false;
       })
       .addCase(recoverContacts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      .addCase(listDeletedContact.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(listDeletedContact.fulfilled, (state, action) => {
+        state.deletedContacts = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(listDeletedContact.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });

@@ -6,11 +6,22 @@ import "./home.css";
 
 const Home = () => {
   const [page, setPage] = useState(0);
+  const [openRecoverModal, setOpenRecoverModal] = useState(false);
   return (
     <>
-      <Navbar page={page} setPage={setPage}></Navbar>
+      <Navbar
+        page={page}
+        setPage={setPage}
+        openRecoverModal={openRecoverModal}
+        setOpenRecoverModal={setOpenRecoverModal}
+      ></Navbar>
       <Body page={page} setPage={setPage}></Body>
-      {/* <RecoverContact></RecoverContact> */}
+      <RecoverContact
+        page={page}
+        setPage={setPage}
+        openRecoverModal={openRecoverModal}
+        setOpenRecoverModal={setOpenRecoverModal}
+      ></RecoverContact>
     </>
   );
 };

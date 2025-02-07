@@ -7,6 +7,13 @@ export const listContactService = async (payload) => {
   );
 };
 
+export const listDeletedContactService = async (payload) => {
+  const { userId } = payload;
+  return await axios.get(
+    `${process.env.REACT_APP_BACKEND_URL}contacts/deleted/${userId}`,
+  );
+};
+
 export const deleteContactService = async (contact_id) => {
   return axios.delete(
     `${process.env.REACT_APP_BACKEND_URL}contacts/${contact_id}`,
@@ -28,8 +35,10 @@ export const createContactService = async (contactData) => {
   );
 };
 
-export const recoverContactService = async () => {
+export const recoverContactService = async (payload) => {
+  const { recoverIds } = payload;
   return await axios.put(
     `${process.env.REACT_APP_BACKEND_URL}contacts/recover`,
+    recoverIds,
   );
 };

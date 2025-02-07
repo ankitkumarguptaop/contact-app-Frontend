@@ -5,6 +5,7 @@ import {
   updateContactType,
   createContactType,
   recoverContactType,
+  listDeletedContactType,
 } from "./contact.type";
 
 import {
@@ -13,6 +14,7 @@ import {
   deleteContactService,
   createContactService,
   recoverContactService,
+  listDeletedContactService,
 } from "../../services/contact.service";
 
 export const listContact = createAsyncThunk(
@@ -21,7 +23,19 @@ export const listContact = createAsyncThunk(
     try {
       const res = await listContactService(payload);
       const data = res.data;
-      console.log("res data", data);
+      return data;
+    } catch (error) {
+      console.log({ errorMessage: error });
+    }
+  },
+);
+
+export const listDeletedContact = createAsyncThunk(
+  listDeletedContactType,
+  async (payload) => {
+    try {
+      const res = await listDeletedContactService(payload);
+      const data = res.data;
       return data;
     } catch (error) {
       console.log({ errorMessage: error });
@@ -51,8 +65,8 @@ export const updateContact = createAsyncThunk(
 
 export const recoverContacts = createAsyncThunk(
   recoverContactType,
-  async () => {
-    const res = await recoverContactService();
+  async (payload) => {
+    const res = await recoverContactService(payload);
     const data = res.data;
     console.log("res data", data);
     return data;

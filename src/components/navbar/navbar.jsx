@@ -5,9 +5,14 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../features/auth-user/auth.slice";
 import { useNavigate } from "react-router-dom";
-import { recoverContacts } from "../../features/contact/contact.action";
+import {
+  recoverContacts,
+  listDeletedContact,
+} from "../../features/contact/contact.action";
 
-const Navbar = ({ setPage, page }) => {
+const Navbar = ({ setPage, page, openRecoverModal, setOpenRecoverModal }) => {
+  const totalContacts = useSelector((state) => state.contact.totalContacts);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
@@ -24,14 +29,22 @@ const Navbar = ({ setPage, page }) => {
     }
   }, [currentUser.user.picture, currentUser]);
 
+  useEffect(() => {
+    dispatch(listDeletedContact({ userId: currentUser.user._id }));
+  }, [totalContacts]);
+
   function handleLogout() {
     dispatch(logout());
     navigate("/");
   }
 
-  function handleRecoverContact() {
-    dispatch(recoverContacts());
-    setPage(0);
+  // function handleRecoverContact() {
+  //   dispatch(listDeletedContact({ userId: currentUser.user._id }));
+  //   setPage(0);
+  // }
+
+  function hanldeOpenRecoverModal() {
+    setOpenRecoverModal(true);
   }
 
   console.log("picture", currentUser.user.picture);
@@ -61,7 +74,7 @@ const Navbar = ({ setPage, page }) => {
         </Typography>
         <Button
           sx={{ color: "black", backgroundColor: "green", margin: "10px" }}
-          onClick={handleRecoverContact}
+          onClick={hanldeOpenRecoverModal}
         >
           Recover
         </Button>
