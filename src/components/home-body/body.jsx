@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   InputLabel,
@@ -685,7 +686,7 @@ const Body = ({ page, setPage }) => {
             ></ContactCard>
           ))}
       </Box>
-      {isLoading && <Box className="loader"></Box>}
+      {isLoading && <CircularProgress />}
     </Box>
   );
 };

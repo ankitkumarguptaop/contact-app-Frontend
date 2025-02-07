@@ -287,7 +287,6 @@ const Signup = () => {
                 <CustomInput
                   value={input.lastName}
                   errorState={error.lastNameError}
-                  // className="input-password"
                   handlerState={handleLastName}
                   label="Last Name"
                 ></CustomInput>
@@ -306,7 +305,6 @@ const Signup = () => {
                 <CustomInput
                   value={input.email}
                   errorState={error.emailError}
-                  // className="input-password"
                   handlerState={handleEmail}
                   label="Email "
                 ></CustomInput>
@@ -326,7 +324,6 @@ const Signup = () => {
                 <CustomInput
                   value={input.password}
                   errorState={error.passwordError}
-                  // className="input-password"
                   handlerState={handlePassword}
                   label="Password"
                 ></CustomInput>
