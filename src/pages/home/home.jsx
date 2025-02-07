@@ -10,7 +10,7 @@ const Home = () => {
     <>
       <Navbar page={page} setPage={setPage}></Navbar>
       <Body page={page} setPage={setPage}></Body>
-      <RecoverContact></RecoverContact>
+      {/* <RecoverContact></RecoverContact> */}
     </>
   );
 };

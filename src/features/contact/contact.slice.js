@@ -73,7 +73,6 @@ export const contactSlice = createSlice({
       })
       .addCase(createContact.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log("paopa", action.payload);
         state.contacts = [...state.contacts, action.payload];
         state.totalContacts = parseInt(state.totalContacts) + 1;
       })
