@@ -208,13 +208,24 @@ const Signup = () => {
       !currentLastNameError &&
       !currentPasswordError
     ) {
+
+      var formdata = new FormData();
+      formdata.append('picture',picture);
+      formdata.append('first_name', input.firstName);
+      formdata.append('last_name', input.lastName);
+      formdata.append('password', input.password);
+      formdata.append('email', input.email);
+
+      console.log("FormData entries:");
+      // for (let pair of formdata.entries()) {
+      //   console.log(pair[0], pair[1]);
+      // }
+      // console.log("hi->", formdata);
+      // console.log("hi", picture);
+      // console.log("hi", input.firstName);
+      // console.log("hi", input.password);
+
       try {
-        const formdata = new FormData();
-        formdata.append("picture", picture);
-        formdata.append("first_name", input.firstName);
-        formdata.append("last_name", input.lastName);
-        formdata.append("password", input.password);
-        formdata.append("email", input.email);
         dispatch(signUpUser(formdata));
         setInput({
           firstName: "",
@@ -235,6 +246,7 @@ const Signup = () => {
       setCheckboxError(false);
     }
   }
+  
   function handelClose() {
     dispatch(removeError());
   }
@@ -260,7 +272,7 @@ const Signup = () => {
           <Box className="login-text">Sign Up</Box>
           <Box className="upper-text">Create your account in a seconds</Box>
           <Box className="form">
-            <form action="">
+            <form action="" id="signup">
               <Box className="input">
                 <CustomInput
                   value={input.firstName}
@@ -340,7 +352,10 @@ const Signup = () => {
                 <input
                   type="file"
                   name="picture"
-                  onChange={(e) => setPicture(e.target.files[0])}
+                  onChange={(e) => {
+                    console.log("Selected File:", e.target.files[0]); // Debugging
+                    setPicture(e.target.files[0]);
+                  }}
                 />
               </Box>
               <Box className="feature-container">

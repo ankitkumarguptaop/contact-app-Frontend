@@ -1,18 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCx8j3qXM_lwacYO6IiXZYZlvw2HUopmCo",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "contact-management-app-afb8a.firebaseapp.com",
   projectId: "contact-management-app-afb8a",
   storageBucket: "contact-management-app-afb8a.firebasestorage.app",
   messagingSenderId: "103715957625",
-  appId: "1:103715957625:web:60ced406009bbe80f51da8",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: "G-CZDMV3QSWT",
 };
 

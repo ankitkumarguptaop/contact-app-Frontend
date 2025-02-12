@@ -1,6 +1,6 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import React from "react";
-import Google from "../../images/google.png";
+import Google from "../../assets/images/google.png";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
@@ -11,13 +11,13 @@ const Auth = ({ image }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   function handleGoogleAuthentication() {
+    try{
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then((result) => {
       if (result.user) {
         toast.success("User successfuly signup!", {
           position: "top-center",
         });
-
         dispatch(
           googleAuth({
             email: result.user.email,
@@ -28,6 +28,13 @@ const Auth = ({ image }) => {
         navigate("/home");
       }
     });
+  }
+  catch(error){
+    toast.error("Failed  signup!", {
+      position: "top-center",
+    });
+ 
+  }
   }
   return (
     <>

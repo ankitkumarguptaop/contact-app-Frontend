@@ -51,9 +51,9 @@ const Body = ({ page, setPage }) => {
     favourite: false,
   });
   const [contactId, setContactId] = useState("");
-  const [openModal, setOpenModal] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [openChildAddModal, setOpenChildAddModal] = useState(false);
-  const [deleteState, setDeleteState] = useState(false);
+  const [isDeleteState, setIsDeleteState] = useState(false);
   const [input, setInput] = useState({
     first_name: "",
     last_name: "",
@@ -61,7 +61,7 @@ const Body = ({ page, setPage }) => {
     relation: "",
     favourite: false,
   });
-  const [editState, setEditState] = useState(false);
+  const [isEditState, setIsEditState] = useState(false);
   const [error, setError] = useState({
     first_name: false,
     last_name: false,
@@ -109,7 +109,7 @@ const Body = ({ page, setPage }) => {
         limit: filters.limit,
         relation: filters.relation,
         favourite: filters.favourite,
-      }),
+      })
     );
   }, [
     filters.limit,
@@ -168,7 +168,6 @@ const Body = ({ page, setPage }) => {
   ];
 
   const handleChangePage = (event, newPage) => {
-    console.log(page);
     setPage(page + 1);
   };
 
@@ -178,9 +177,9 @@ const Body = ({ page, setPage }) => {
   };
 
   function addOrEditOrDeleteContacts() {
-    if (deleteState) {
+    if (isDeleteState) {
       dispatch(deleteContact(contactId));
-    } else if (!editState) {
+    } else if (!isEditState) {
       dispatch(
         createContact({
           relation_id: input.relation,
@@ -189,7 +188,7 @@ const Body = ({ page, setPage }) => {
           phone_no: input.phone_no,
           user_id: user_id,
           favourite: input.favourite,
-        }),
+        })
       );
     } else {
       dispatch(
@@ -203,7 +202,7 @@ const Body = ({ page, setPage }) => {
             favourite: input.favourite,
           },
           contact_id: contactId,
-        }),
+        })
       );
     }
     setInput({
@@ -213,9 +212,9 @@ const Body = ({ page, setPage }) => {
       relation: "",
       favourite: false,
     });
-    setOpenModal(false);
-    setEditState(false);
-    setDeleteState(false);
+    setIsOpenModal(false);
+    setIsEditState(false);
+    setIsDeleteState(false);
     setOpenChildAddModal(false);
   }
 
@@ -233,8 +232,8 @@ const Body = ({ page, setPage }) => {
       phone_no: false,
       relation: false,
     });
-    setOpenModal(false);
-    setEditState(false);
+    setIsOpenModal(false);
+    setIsEditState(false);
     setOpenChildAddModal(false);
   }
 
@@ -242,9 +241,9 @@ const Body = ({ page, setPage }) => {
     setInput({ ...input, favourite: !input.favourite });
   }
 
-  function handleEditState(contact) {
-    setEditState(true);
-    setOpenModal(true);
+  function handleisEditState(contact) {
+    setIsEditState(true);
+    setIsOpenModal(true);
     setContactId(contact._id);
     setInput({
       first_name: contact.first_name,
@@ -258,8 +257,7 @@ const Body = ({ page, setPage }) => {
   function handleDeleteState(id) {
     setOpenChildAddModal(true);
     setContactId(id);
-    setDeleteState(true);
-    console.log("delete", id);
+    setIsDeleteState(true);
   }
 
   function clearFilters() {
@@ -399,14 +397,14 @@ const Body = ({ page, setPage }) => {
           <Button
             sx={{ height: "40px", marginLeft: "5px" }}
             variant="contained"
-            onClick={() => setOpenModal(true)}
+            onClick={() => setIsOpenModal(true)}
           >
             Add
           </Button>
         </Box>
       </Box>
       <FormControl className="form">
-        <Modal sx={parentStyle} open={openModal} onClose={handleCloseModal}>
+        <Modal sx={parentStyle} open={isOpenModal} onClose={handleCloseModal}>
           <Box className="modal-background">
             <Box className="add-functionality">
               <Box className="add-text">Add Contact</Box>
@@ -527,7 +525,7 @@ const Body = ({ page, setPage }) => {
                     onClick={handleErrorHandling}
                     variant="contained"
                   >
-                    {editState ? "Edit" : "Add"}
+                    {isEditState ? "Edit" : "Add"}
                   </Button>
                   <Button
                     disableRipple
@@ -557,9 +555,9 @@ const Body = ({ page, setPage }) => {
               variant="body2"
               component="h4"
             >
-              {editState
+              {isEditState
                 ? "Do you want to Edit Contact? "
-                : deleteState
+                : isDeleteState
                   ? "Do you want to Delete this Contact ?"
                   : "Do you want to Add Contact ?"}
             </Typography>
@@ -636,7 +634,7 @@ const Body = ({ page, setPage }) => {
                               <>
                                 <ModeEditOutlineIcon
                                   sx={{ padding: "5px", cursor: "pointer" }}
-                                  onClick={() => handleEditState(contact)}
+                                  onClick={() => handleisEditState(contact)}
                                 >
                                   {" "}
                                 </ModeEditOutlineIcon>{" "}
@@ -684,7 +682,7 @@ const Body = ({ page, setPage }) => {
               favourite={contact.favourite}
               phone_no={contact.phone_no}
               handleDelete={() => handleDeleteState(contact._id)}
-              handleEdit={() => handleEditState(contact)}
+              handleEdit={() => handleisEditState(contact)}
             ></ContactCard>
           ))}
       </Box>

@@ -40,7 +40,6 @@ export const authUserSlice = createSlice({
           expires: 7,
           secure: true,
         });
-        console.log("cutrrent ", action.payload);
       })
       .addCase(signInUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -52,7 +51,6 @@ export const authUserSlice = createSlice({
       .addCase(googleAuth.fulfilled, (state, action) => {
         state.isLoading = false;
         state.currentUser = action.payload;
-        console.log(state.currentUser);
       })
       .addCase(googleAuth.rejected, (state, action) => {
         state.isLoading = false;

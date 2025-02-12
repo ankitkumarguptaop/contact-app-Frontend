@@ -14,11 +14,9 @@ export const listDeletedContactService = async (payload) => {
   );
 };
 
-export const deleteContactService = async (contact_id) => {
-  return axios.delete(
+export const deleteContactService = async (contact_id) => await axios.delete(
     `${process.env.REACT_APP_BACKEND_URL}contacts/${contact_id}`,
   );
-};
 
 export const updateContactService = async (payload) => {
   const { contact_id, updatedData } = payload;
@@ -28,12 +26,11 @@ export const updateContactService = async (payload) => {
   );
 };
 
-export const createContactService = async (contactData) => {
-  return await axios.post(
+export const createContactService = async (contactData) => await axios.post(
     `${process.env.REACT_APP_BACKEND_URL}contacts`,
     contactData,
   );
-};
+
 
 export const recoverContactService = async (payload) => {
   const { recoverIds } = payload;

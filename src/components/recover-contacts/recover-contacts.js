@@ -1,6 +1,6 @@
 import { Box, Button, Modal } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { recoverContacts } from "../../features/contact/contact.action";
 
@@ -13,9 +13,6 @@ const RecoverContact = ({
   const dispatch = useDispatch();
   const deletedContacts = useSelector((state) => state.contact.deletedContacts);
   const [selectedRows, setSelectedRows] = useState([]);
-
-  console.log("delete", deletedContacts);
-  console.log("select", selectedRows);
 
   const style = {
     top: "50%",
@@ -63,7 +60,6 @@ const RecoverContact = ({
     <Modal
       sx={style}
       open={openRecoverModal}
-      // onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >

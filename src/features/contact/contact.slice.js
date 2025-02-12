@@ -35,7 +35,6 @@ export const contactSlice = createSlice({
           state.contacts = [...action.payload.contacts];
         }
         state.totalContacts = parseInt(action.payload.totalContacts);
-        console.log("totalContacts", state.totalContacts);
       })
       .addCase(listContact.rejected, (state, action) => {
         state.isLoading = false;

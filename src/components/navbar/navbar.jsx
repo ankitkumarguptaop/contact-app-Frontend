@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../features/auth-user/auth.slice";
 import { useNavigate } from "react-router-dom";
 import {
-  recoverContacts,
   listDeletedContact,
 } from "../../features/contact/contact.action";
 
@@ -16,7 +15,6 @@ const Navbar = ({ setPage, page, openRecoverModal, setOpenRecoverModal }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
-  console.log(" user", currentUser);
   const [pictureUrl, setPictureUrl] = useState("");
 
   useEffect(() => {
@@ -38,16 +36,9 @@ const Navbar = ({ setPage, page, openRecoverModal, setOpenRecoverModal }) => {
     navigate("/");
   }
 
-  // function handleRecoverContact() {
-  //   dispatch(listDeletedContact({ userId: currentUser.user._id }));
-  //   setPage(0);
-  // }
-
   function hanldeOpenRecoverModal() {
     setOpenRecoverModal(true);
   }
-
-  console.log("picture", currentUser.user.picture);
 
   return (
     <Box className="navbar">

@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  listContactType,
-  deleteContactType,
-  updateContactType,
-  createContactType,
-  recoverContactType,
-  listDeletedContactType,
+  LIST_CONTACT,
+  LIST_DELETED_CONTACT,
+  UPDATE_CONTACT,
+   CREATE_CONTACT,
+  RECOVER_CONTACT,
+  DELETE_CONTACT
 } from "./contact.type";
 
 import {
@@ -18,7 +18,7 @@ import {
 } from "../../services/contact.service";
 
 export const listContact = createAsyncThunk(
-  listContactType,
+  LIST_CONTACT,
   async (payload) => {
     try {
       const res = await listContactService(payload);
@@ -31,7 +31,7 @@ export const listContact = createAsyncThunk(
 );
 
 export const listDeletedContact = createAsyncThunk(
-  listDeletedContactType,
+  LIST_DELETED_CONTACT,
   async (payload) => {
     try {
       const res = await listDeletedContactService(payload);
@@ -44,7 +44,7 @@ export const listDeletedContact = createAsyncThunk(
 );
 
 export const deleteContact = createAsyncThunk(
-  deleteContactType,
+  DELETE_CONTACT,
   async (contact_id) => {
     const res = await deleteContactService(contact_id);
     const data = res.data;
@@ -54,7 +54,7 @@ export const deleteContact = createAsyncThunk(
 );
 
 export const updateContact = createAsyncThunk(
-  updateContactType,
+  UPDATE_CONTACT,
   async (payload) => {
     const res = await updateContactService(payload);
     const data = res.data;
@@ -64,7 +64,7 @@ export const updateContact = createAsyncThunk(
 );
 
 export const recoverContacts = createAsyncThunk(
-  recoverContactType,
+  RECOVER_CONTACT,
   async (payload) => {
     const res = await recoverContactService(payload);
     const data = res.data;
@@ -74,7 +74,7 @@ export const recoverContacts = createAsyncThunk(
 );
 
 export const createContact = createAsyncThunk(
-  createContactType,
+  CREATE_CONTACT,
   async (contactData) => {
     const res = await createContactService(contactData);
     const data = res.data;

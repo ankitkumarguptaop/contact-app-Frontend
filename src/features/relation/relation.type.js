@@ -1,1 +1,1 @@
-export const listRelationType = "GET/RELATIONS";
+export const LIST_RELATION = "relation/LIST";
